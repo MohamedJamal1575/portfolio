@@ -24,9 +24,11 @@ export function ContactSection() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     try {
       const response = await fetch(
-        'http://localhost:3000/api/send-mail',
+        `${API_URL}/api/send-mail`,
         {
           method: 'POST',
           headers: {
