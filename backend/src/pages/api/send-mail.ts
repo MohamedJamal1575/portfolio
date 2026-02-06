@@ -1,16 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import nodemailer from 'nodemailer';
+import { Resend } from "resend";
 
 type ResponseData = {
   success: boolean;
   message: string;
-};  
- 
+};
+
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-  // ✅ CORS headers
+
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader(
@@ -18,12 +21,10 @@ export default async function handler(
     'Content-Type, Authorization'
   );
 
-  // ✅ Handle preflight request
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // ✅ Allow only POST
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
@@ -33,7 +34,6 @@ export default async function handler(
 
   const { name, email, message } = req.body;
 
-  // ✅ Basic validation
   if (!name || !email || !message) {
     return res.status(400).json({
       success: false,
@@ -42,20 +42,10 @@ export default async function handler(
   }
 
   try {
-    // ✅ Create transporter
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
 
-    // ✅ Send mail
-    await transporter.sendMail({
-      from: `"Portfolio Contact" <${process.env.SMTP_USER}>`,
-      to: process.env.RECEIVER_EMAIL,
-      replyTo: email,
+    await resend.emails.send({
+      from: "Portfolio Contact <onboarding@resend.dev>",
+      to: [process.env.RECEIVER_EMAIL as string],
       subject: `New Contact Message from ${name}`,
       html: `
         <div style="background-color:#f5f7fb;padding:24px">

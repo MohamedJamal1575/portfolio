@@ -32,7 +32,7 @@ export default function Home() {
               <p>Modern Frontend Development • React • TypeScript • Next.js</p>
               <p>Building scalable, high-performance web experiences with React & Next.js</p>
             </div>
-            <h4>Visit My website - <a href="http://" target="_blank" rel="noopener noreferrer">www </a></h4>            
+            <h4>Visit My website - <a href="http://" target="_blank" rel="noopener noreferrer">https://mohamed-jamal.netlify.app/</a></h4>            
           </center>
         </main>
       </div>
